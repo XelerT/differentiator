@@ -65,21 +65,35 @@ node_t* diff_tree (const node_t *origin_node, tree_t *tree)
                 return new_node;
         case FUNC:
                 node_t temp_node2 = {};
-                $
                 if (!stricmp(origin_node->func, "sin")) {
-                $
                         edit_temp(&temp_node, OPERATOR, MUL);
                         strcpy(temp_node2.func, "cos");
                         temp_node2.type = FUNC;
-                        $
+
                         new_node = create_brunch(ins_temp, tree_insert(&temp_node2), diff(right));
-                        $
                         L->right = ins_origin(right);
 
                 } else if (!stricmp(origin_node->func, "cos")) {
                         $
+                        edit_temp(&temp_node, OPERATOR, MUL);
+                        strcpy(temp_node2.func, "sin");
+                        temp_node2.type = FUNC;
+
+                        new_node = create_brunch(ins_temp, ins_temp, diff(right));
+
+                        edit_temp(&temp_node, NUMBER, -1);
+                        L->left = tree_insert(&temp_node);
+                        L->right = tree_insert(&temp_node2);
+                        L->right->left = ins_origin(right);
                 } else if (!stricmp(origin_node->func, "ln")) {
                         $
+                        edit_temp(&temp_node, OPERATOR, MUL);
+                        edit_temp(&temp_node2, OPERATOR, DIV);
+
+                        new_node = create_brunch(ins_temp, tree_insert(&temp_node2), diff(right));
+                        edit_temp(&temp_node, NUMBER, 1);
+                        L->left  = ins_temp;
+                        L->right = ins_origin(right);
                 }
                 $
                 return new_node;
