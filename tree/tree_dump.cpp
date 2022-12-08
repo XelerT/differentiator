@@ -54,7 +54,7 @@ static const char digraph_atr_sample[] = "digraph %s {                          
                                                 \nsplines = %s;                         \
                                                 \n";
 
-static const char node_atr_sample[] = "\nnode%d[shape = \"%s\", style = \"%s\",                                            \
+static const char node_atr_sample[] = "\nnode%x[shape = \"%s\", style = \"%s\",                                            \
 		                                \nheight = %d, width = %d, fixedsize = %s,                               \
 		                                \nfillcolor = \"%s\",                                                    \
 		                                \nfontsize = %d,                                                         \
@@ -63,11 +63,11 @@ static const char node_atr_sample[] = "\nnode%d[shape = \"%s\", style = \"%s\", 
 
 static const char edge_atr_sample[] = "\nedge[penwidth = %d, color = \"%s\"];";
 
-static const char node_sample_str[] = "node%lld [label = \"%s\"];\n";
-static const char node_sample_dbl[] = "node%lld [label = \"%llg\"];\n";
-static const char node_sample_dec[] = "node%lld [label = \"%c\"];\n";
+static const char node_sample_str[] = "node%x [label = \"%s\"];\n";
+static const char node_sample_dbl[] = "node%x [label = \"%llg\"];\n";
+static const char node_sample_dec[] = "node%x [label = \"%c\"];\n";
 
-static const char nodes_tie_atr[] = "node%lld -> node%lld [color = %s];\n";
+static const char nodes_tie_atr[] = "node%x -> node%x [color = %s];\n";
 
 
 static FILE *dot_file = nullptr;
@@ -101,16 +101,16 @@ void print_gv_nodes (node_t *node)
         if (node->right)
                 print_gv_nodes(node->right);
 
-        gv_print(node_atr_sample, node->indx, node->atr.shape, node->atr.style, node->atr.height,
+        gv_print(node_atr_sample, node, node->atr.shape, node->atr.style, node->atr.height,
                  node->atr.width, node->atr.fixedsize, node->atr.fillcolor,node->atr.fontsize,
                  node->atr.penwidth);
 
         if (node->type == VARIABLE)
-                gv_print(node_sample_dec, node->indx, node->data);
+                gv_print(node_sample_dec, node, node->data);
         else if (node->type == OPERATOR)
-                gv_print(node_sample_dec, node->indx, node->data);
+                gv_print(node_sample_dec, node, node->data);
         else if (node->type == NUMBER)
-                gv_print(node_sample_dbl, node->indx, node->data);
+                gv_print(node_sample_dbl, node, node->data);
 }
 
 void tie_gv_nodes (node_t *node)
@@ -120,10 +120,10 @@ void tie_gv_nodes (node_t *node)
         if (node->right)
                 tie_gv_nodes(node->right);
         if (node->left) {
-                gv_print(nodes_tie_atr, node->indx, node->left->indx, "black");
+                gv_print(nodes_tie_atr, node, node->left, "black");
         }
         if (node->right) {
-                gv_print(nodes_tie_atr, node->indx, node->right->indx, "red");
+                gv_print(nodes_tie_atr, node, node->right, "red");
 
         }
 }

@@ -66,7 +66,7 @@ struct tree_t {
 };
 
 int tree_ctor (tree_t *tree);
-node_t* tree_insert (tree_t *tree, const node_t *node);
+node_t* tree_insert (const node_t *node);
 int tree_dtor (tree_t *tree);
 void free_nodes (node_t *node);
 #endif /*TREE_H*/

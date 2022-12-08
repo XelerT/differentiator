@@ -108,7 +108,7 @@ $
 
                 temp_node.type = OPERATOR;
                 temp_node.data.op = op;
-                node = tree_insert(tree, &temp_node);
+                node = tree_insert(&temp_node);
                 $
                 node->left  = l_node;
                 node->right = r_node;
@@ -135,7 +135,7 @@ $
 
                 temp_node.type = OPERATOR;
                 temp_node.data.op = op;
-                node = tree_insert(tree, &temp_node);
+                node = tree_insert(&temp_node);
                 $
                 node->left  = l_node;
                 printf("=-=-node data: %x %c %llg\n", node, node->left->data, node->left->data);
@@ -192,5 +192,5 @@ node_t* get_n (const char* str, size_t *char_count, tree_t *tree)
         }
 
         assert(*char_count != prev_char_count);
-        return tree_insert(tree, &node);
+        return tree_insert(&node);
 }
