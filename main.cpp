@@ -33,6 +33,7 @@ int main ()
         tree_graph(&diffed_tree, "diffed_graph.dot");
 $
         fclose(diff);
+        tree_dtor(&diffed_tree);
         tree_dtor(&tree);
         return 0;
 }
