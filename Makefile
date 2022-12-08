@@ -1,7 +1,7 @@
-CFILES = main.cpp tree\tree.cpp tree\tree_dump.cpp tree\text_tree.cpp
+CFILES = main.cpp tree\tree.cpp tree\tree_dump.cpp tree\text_tree.cpp diff.cpp
 OUTPUT = a.exe
 IMG_FORMAT = png
-DOT_FILE_NAME = tree_graph.dot
+DOT_FILE_NAME = diffed_graph.dot
 
 CFLAGS= -Wshadow    			\
 	-Winit-self 			\
@@ -47,7 +47,7 @@ all:
 	@ g++ -o $(OUTPUT) $(CFLAGS) $(CFILES)
 run:
 	@ a.exe
-	@ echo Run List
+	@ echo Run
 
 .PHONY: clean
 clean:

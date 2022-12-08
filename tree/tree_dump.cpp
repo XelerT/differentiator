@@ -73,13 +73,13 @@ static const char nodes_tie_atr[] = "node%lld -> node%lld [color = %s];\n";
 static FILE *dot_file = nullptr;
 #define gv_print(form,...) fprintf(dot_file, form, __VA_ARGS__)
 
-void tree_graph (tree_t *tree)
+void tree_graph (tree_t *tree, const char *dot_file_name)
 {
         if (!tree) {
                 fprintf(stderr, "Tree pointer is null. \nIn File: \n\t%s \nLine: \n\t%d.\n", __FILE__, __LINE__);
                 return;
         }
-        /*FILE * */dot_file = fopen("tree_graph.dot", "w");
+        /*FILE * */dot_file = fopen(dot_file_name, "w");
         if (!dot_file) {
                 fprintf(stderr, "Dot file pointer is null. \nIn File: \n\t%s \nLine: \n\t%d.\n", __FILE__, __LINE__);
                 return;

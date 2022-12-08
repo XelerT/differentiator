@@ -1,6 +1,8 @@
 #ifndef TREE_H
 #define TREE_H
 
+#define $ fprintf(stderr, "I'm here. File %s Line %d\n", __FILE__, __LINE__);
+
 enum tree_errors {
         NULL_TREE_PTR = 1,
         NULL_ROOT_PTR = 2,
@@ -24,11 +26,11 @@ struct graph_node_atr_t {
 };
 
 enum operator_t {
-        ADD = 43,
-        SUB = 45,
-        MUL = 42,
-        DIV = 47,
-        DEG = 94
+        ADD = '+',
+        SUB = '-',
+        MUL = '*',
+        DIV = '/',
+        DEG = '^'
 };
 
 union elem_t {
@@ -64,7 +66,7 @@ struct tree_t {
 };
 
 int tree_ctor (tree_t *tree);
-node_t* tree_insert (tree_t *tree, node_t node);
+node_t* tree_insert (tree_t *tree, const node_t *node);
 int tree_dtor (tree_t *tree);
 void free_nodes (node_t *node);
 #endif /*TREE_H*/

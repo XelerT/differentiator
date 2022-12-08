@@ -2,6 +2,7 @@
 #include "tree\tree.h"
 #include "tree\tree_dump.h"
 #include "tree\tree_text.h"
+#include "diff.h"
 
 #define $ fprintf(stderr, "I'm here. File %s Line %d\n", __FILE__, __LINE__);
 
@@ -21,13 +22,17 @@ int main ()
         replace_n (&text);
         divide_text (&text);
         size_t char_count = 0;
-        $        $
+        $
         tree.root = get_g(text.buf, &char_count, &tree);
         $
-        tree_graph(&tree);
+        tree_graph(&tree, "tree_graph.dot");
 
+        tree_t diffed_tree = {};
+        tree_ctor(&diffed_tree);
+        diffed_tree.root = diff_tree((const node_t*) tree.root, &diffed_tree);
+        tree_graph(&diffed_tree, "diffed_graph.dot");
 $
-        // fclose(output);
-        // tree_dtor(&tree);
+        fclose(diff);
+        tree_dtor(&tree);
         return 0;
 }

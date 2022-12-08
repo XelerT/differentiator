@@ -21,17 +21,19 @@ int tree_ctor (tree_t *tree)
         return 0;
 }
 
-node_t* tree_insert (tree_t *tree, node_t temp_node)
+node_t* tree_insert (tree_t *tree, const node_t *temp_node)
 {
         if (!tree) {
                 fprintf(stderr, "Null tree pointer File: %s Line: %d\n", __FILE__, __LINE__);
                 return nullptr;
         }
         node_t *node = (node_t*) calloc(1, sizeof(node_t));
+        if (!node)
+                return nullptr;
 
-        node->atr  = temp_node.atr;
-        node->data = temp_node.data;
-        node->type = temp_node.type;
+        node->atr  = temp_node->atr;
+        node->data = temp_node->data;
+        node->type = temp_node->type;
         // printf("=======%c\n", temp_node.data);
         // printf("=-=-node data: %c %llg\n", node->data, node->data);
         node->indx = tree->size;

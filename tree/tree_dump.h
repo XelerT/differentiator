@@ -17,6 +17,6 @@ int tree_dump (tree_t *tree, const char *file_name, const char *func, const int 
 int tree_error (tree_t *tree);
 void tie_gv_nodes (node_t *node);
 void print_gv_nodes (node_t *node);
-void tree_graph (tree_t *tree);
+void tree_graph (tree_t *tree, const char *dot_file_name);
 
 #endif /*TREE_DUMP_H*/
