@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 #include "tree.h"
 
 // #define img_path C:\Users\taran\Desktop\X course\Akinator\graph.png
@@ -32,8 +33,7 @@ node_t* tree_insert (const node_t *temp_node)
         node->atr  = temp_node->atr;
         node->data = temp_node->data;
         node->type = temp_node->type;
-        // printf("=======%c\n", temp_node.data);
-        // printf("=-=-node data: %c %llg\n", node->data, node->data);
+        strcpy(node->func, temp_node->func);
         node->new_node = 1;
 
         return node;

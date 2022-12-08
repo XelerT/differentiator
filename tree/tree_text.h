@@ -38,6 +38,7 @@ node_t* get_g (const char* str, size_t *char_count, tree_t *tree);
 node_t* get_e (const char* str, size_t *char_count, tree_t *tree);
 node_t* get_t (const char* str, size_t *char_count, tree_t *tree);
 node_t* get_p (const char* str, size_t *char_count, tree_t *tree);
+node_t* get_f (const char* str, size_t *char_count, tree_t *tree);
 node_t* get_n (const char* str, size_t *char_count, tree_t *tree);
 
 #endif /*TEXT_TREE_H*/

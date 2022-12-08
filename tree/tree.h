@@ -42,19 +42,19 @@ union elem_t {
 enum types_t {
         VARIABLE = 1,
         OPERATOR = 2,
-        NUMBER   = 3
+        NUMBER   = 3,
+        FUNC     = 4
 };
 
-// typedef data_t elem_t;
+const int MAX_NAME_LENGTH = 50;
 
 struct node_t {
         node_t *left  = nullptr;
-        // elem_t data   = nullptr;
         node_t *right = nullptr;
         size_t indx   =       0;
         int new_node  =       0;
-
         elem_t data;
+        char func[MAX_NAME_LENGTH] = {};
         char type = 0;
 
         graph_node_atr_t atr = {};

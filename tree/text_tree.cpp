@@ -7,6 +7,7 @@
 
 #include "tree_text.h"
 #define $ fprintf(stderr, "I'm here. File %s Line %d\n", __FILE__, __LINE__);
+#define $
 
 int get_text (FILE *input, text_t *text)
 {
@@ -152,14 +153,52 @@ node_t* get_p (const char* str, size_t *char_count, tree_t *tree)
 {
         assert(str);
         assert(char_count);
-
-        node_t* node = nullptr;
+$
+        node_t *node = nullptr;
         if (*(str + *char_count) == '(') {
                 ++*char_count;
                 node = get_e(str, char_count, tree);
                 assert(*(str + *char_count) == ')');
                 ++*char_count;
         } else {
+                node = get_f(str, char_count, tree);
+        }
+
+        return node;
+}
+
+node_t* get_f (const char* str, size_t *char_count, tree_t *tree)
+{
+        assert(str);
+        assert(char_count);
+$
+        node_t *node = nullptr;
+        char name[MAX_NAME_LENGTH] = {};
+        int i = 0;
+
+        if ('a' <= *(str + *char_count) && *(str + *char_count) <= 'z') {
+                if ('a' <= *(str + *char_count + 1) && *(str + *char_count + 1) <= 'z') {
+                        while (*(str + *char_count) != '(') {
+                                name[i++] = *(str + *char_count);
+                                ++*char_count;
+                        }
+                        ++*char_count;
+                        node_t temp_node = {};
+                        node_t *r_node = get_e(str, char_count, tree);
+
+                        temp_node.type = FUNC;
+                        strcpy(temp_node.func, name);
+                        node = tree_insert(&temp_node);
+                        node->right = r_node;
+
+                        temp_node.type = 0;
+                        node_t *l_node = tree_insert(&temp_node);
+                        assert(*(str + *char_count) == ')');
+                        ++*char_count;
+                }  else {
+                        node = get_n(str, char_count, tree);
+                }
+        }  else {
                 node = get_n(str, char_count, tree);
         }
 
@@ -170,22 +209,23 @@ node_t* get_n (const char* str, size_t *char_count, tree_t *tree)
 {
         assert(str);
         assert(char_count);
-
+$
         node_t node = {};
         double val = 0;
         size_t prev_char_count = *char_count;
+
         while ('0' <= *(str + *char_count) && *(str + *char_count) <= '9') {
                 val = (double) val * 10 + *(str + *char_count) - '0';
                 ++*char_count;
         }
 
         if ('a' <= *(str + *char_count) && *(str + *char_count) <= 'z') {
-        $
+                $
                 node.data.var = *(str + *char_count);
                 node.type = VARIABLE;
                 ++*char_count;
         } else if (val) {
-        $
+                $
                 node.data.dbl = val;
                 printf("%s --------%llg %llg\n", __PRETTY_FUNCTION__, val, node.data);
                 node.type = NUMBER;

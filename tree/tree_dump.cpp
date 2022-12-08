@@ -63,9 +63,9 @@ static const char node_atr_sample[] = "\nnode%x[shape = \"%s\", style = \"%s\", 
 
 static const char edge_atr_sample[] = "\nedge[penwidth = %d, color = \"%s\"];";
 
-static const char node_sample_str[] = "node%x [label = \"%s\"];\n";
-static const char node_sample_dbl[] = "node%x [label = \"%llg\"];\n";
-static const char node_sample_dec[] = "node%x [label = \"%c\"];\n";
+static const char node_sample_str[]  = "node%x [label = \"%s\"];\n";
+static const char node_sample_dbl[]  = "node%x [label = \"%llg\"];\n";
+static const char node_sample_dec[]  = "node%x [label = \"%c\"];\n";
 
 static const char nodes_tie_atr[] = "node%x -> node%x [color = %s];\n";
 
@@ -111,6 +111,8 @@ void print_gv_nodes (node_t *node)
                 gv_print(node_sample_dec, node, node->data);
         else if (node->type == NUMBER)
                 gv_print(node_sample_dbl, node, node->data);
+        else if (node->type == FUNC)
+                gv_print(node_sample_str, node, node->func);
 }
 
 void tie_gv_nodes (node_t *node)
