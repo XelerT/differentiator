@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <math.h>
 
 #include "diff.h"
 
@@ -55,6 +56,56 @@ node_t* diff_tree (const node_t *origin_node, tree_t *tree)
                                 L->left = create_brunch(ins_temp, diff(left), ins_origin(right));
                                 L->right = create_brunch(ins_temp, ins_origin(left), diff(right));
                                 R = create_brunch(ins_temp, ins_origin(left), ins_origin(right));        //create denomiator x*x
+
+                                return new_node;
+                        case DEG:
+                                edit_temp(&temp_node, OPERATOR, MUL);
+                                new_node = ins_temp;
+                                node_t temp_node2 = {};
+                                $
+
+                                if (contain_var(origin_node->right)) {
+                                        $
+                                        if (contain_var(origin_node->left)) {
+                                                edit_temp(&temp_node2, OPERATOR, ADD);
+                                                L = create_brunch(tree_insert(&temp_node2), ins_temp, ins_temp);
+                                                L->left->left = diff(left);
+                                                temp_node2.type = FUNC;
+                                                strcpy(temp_node2.func, "ln");
+                                                L->left->right = tree_insert(&temp_node2);
+                                                L->left->right->right = ins_origin(right);
+
+                                                edit_temp(&temp_node2, OPERATOR, DIV);
+                                                L->right->left = create_brunch(ins_temp, ins_origin(left), tree_insert(&temp_node2));
+                                                L->right->right = diff(right);
+
+                                                edit_temp(&temp_node, NUMBER, 1);
+                                                L->right->left->right->left = tree_insert(&temp_node);
+                                                L->right->left->right->right = ins_origin(right);
+                                                R = copy_brunch((node_t*) origin_node);
+
+                                                return new_node;
+                                        }
+                                        $
+                                        // edit_temp(&temp_node2, FUNC, "ln");
+                                        temp_node2.type = FUNC;
+                                        strcpy(temp_node2.func, "ln");
+                                        L = create_brunch(ins_temp, copy_brunch((node_t*) origin_node), tree_insert(&temp_node2));
+                                        L->right->right = ins_origin(left);
+                                        R = diff(right);
+                                } else if (contain_var(origin_node->left)) {
+                                        edit_temp(&temp_node2, OPERATOR, DEG);
+                                        L = create_brunch(ins_temp, ins_origin(right), tree_insert(&temp_node2));
+
+                                        edit_temp(&temp_node, NUMBER, origin_node->right->data.dbl - 1);
+                                        L->right->left = ins_origin(left);
+                                        L->right->right = ins_temp;
+                                        R = diff(left);
+                                } else {
+                                        edit_temp(&temp_node, NUMBER, 0);
+                                        new_node = tree_insert(&temp_node);
+                                }
+                                printf("Left has var %x\n", contain_var(origin_node->left));
 
                                 return new_node;
                 }
@@ -149,4 +200,153 @@ node_t* copy_brunch(node_t *node)
         }
 
         return new_node;
+}
+
+node_t* contain_var (node_t *node)
+{
+        assert(node);
+
+        node_t *var_node = nullptr;
+
+        if (node->type == VARIABLE)
+                return node;
+        if (node->left) {
+                var_node = contain_var(node->left);
+                if (var_node)
+                        return var_node;
+        }
+        if (node->right) {
+                var_node = contain_var(node->right);
+        }
+
+        return var_node;
+}
+
+node_t* collapse_consts (node_t *node)
+{
+        assert(node);
+
+        if (node->left)
+                node->left  = collapse_consts(node->left);
+        if (node->right)
+                node->right = collapse_consts(node->right);
+
+        if (node->left && node->right)
+                if (node->left->type == NUMBER && node->right->type == NUMBER) {
+                        if (node->type == OPERATOR) {
+                                elem_t data;
+                                switch (node->data.op) {
+                                case ADD:
+                                        data.dbl = node->left->data.dbl + node->right->data.dbl;
+                                        break;
+                                case SUB:
+                                        data.dbl = node->left->data.dbl - node->right->data.dbl;
+                                        break;
+                                case MUL:
+                                        data.dbl = node->left->data.dbl * node->right->data.dbl;
+                                        break;
+                                case DIV:
+                                        data.dbl = node->left->data.dbl / node->right->data.dbl;
+                                        break;
+                                case DEG:
+                                        data.dbl = pow(node->left->data.dbl, node->right->data.dbl);
+                                        break;
+                                }
+                                node->type = NUMBER;
+                                node->data.dbl = data.dbl;
+
+                                free(node->left);
+                                free(node->right);
+                                node->left  = nullptr;
+                                node->right = nullptr;
+                        }
+                }
+
+        return node;
+}
+
+node_t* simplify_brunch (node_t *node)
+{
+        assert(node);
+        $
+        node_t *temp_node = node;
+
+        if (node->left)
+                node->left = simplify_brunch(node->left);
+        if (node->right)
+                node->right = simplify_brunch(node->right);
+        $
+        if (node->type == OPERATOR) {
+        $
+                switch (node->data.op) {
+                case ADD:
+                        if (node->left->type == NUMBER) {
+                        $
+                                if (node->left->data.dbl == 0) {
+                        $
+                                        temp_node = node->right;
+                                        free(node->left);
+                                        node->left = nullptr;
+                                        free(node);
+                                }
+                        } else if (node->right->type == NUMBER) {
+                                if (node->right->data.dbl == 0) {
+                                        temp_node = node->left;
+                                        free(node->right);
+                                        node->right = nullptr;
+                                        free(node);
+                                }
+                        }
+                        break;
+                case MUL:
+                $
+                        if (node->left->type == NUMBER || node->right->type == NUMBER) {
+                                if (node->left->data.dbl == 0 || node->right->data.dbl == 0) {
+                                        node->type = NUMBER;
+                                        node->data.dbl = 0;
+                                        temp_node = node;
+                                        free(node->right);
+                                        node->right = nullptr;
+                                        free(node->left);
+                                        node->left = nullptr;
+                                }
+                                break;
+                        }
+                        if (node->left->type == NUMBER) {
+                                if (node->left->data.dbl == 1) {
+                                        temp_node = node->right;
+                                        free(node->left);
+                                        node->left = nullptr;
+                                        free(node);
+                                }
+                        } else if (node->right->type == NUMBER) {
+                                if (node->right->data.dbl == 1) {
+                                        temp_node = node->left;
+                                        free(node->right);
+                                        node->right = nullptr;
+                                        free(node);
+                                }
+                        }
+                        break;
+                case DEG:
+                        if (node->left->type == NUMBER) {
+                                if (node->left->data.dbl == 1) {
+                                        temp_node = node->left;
+                                        free(node->right);
+                                        node->right = nullptr;
+                                        free(node);
+                                }
+                        } else if (node->right->type == NUMBER) {
+                                if (node->right->data.dbl == 1) {
+                                        temp_node = node->left;
+                                        free(node->right);
+                                        node->right = nullptr;
+                                        free(node);
+                                }
+                        }
+                        break;
+                }
+        }
+
+        return temp_node;
 }

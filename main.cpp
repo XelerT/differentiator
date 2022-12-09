@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "tree\tree.h"
 #include "tree\tree_dump.h"
-#include "tree\tree_text.h"
+#include "tree\text_tree.h"
 #include "diff.h"
 
 #define $ fprintf(stderr, "I'm here. File %s Line %d\n", __FILE__, __LINE__);
@@ -30,6 +30,10 @@ int main ()
         tree_t diffed_tree = {};
         tree_ctor(&diffed_tree);
         diffed_tree.root = diff_tree((const node_t*) tree.root, &diffed_tree);
+        diffed_tree.root = simplify_brunch(diffed_tree.root);
+        collapse_consts(diffed_tree.root);
+        // diffed_tree.root = simplify_brunch(diffed_tree.root);
+
         tree_graph(&diffed_tree, "diffed_graph.dot");
 $
         fclose(diff);

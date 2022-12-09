@@ -54,8 +54,6 @@ void free_nodes (node_t *node)
         assert(node);
 
         if (node->left) {
-                assert(node);
-                assert(node->left);
                 free_nodes(node->left);
         }
         if (node->right) {

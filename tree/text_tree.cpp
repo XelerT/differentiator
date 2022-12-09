@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <assert.h>
 
-#include "tree_text.h"
+#include "text_tree.h"
 #define $ fprintf(stderr, "I'm here. File %s Line %d\n", __FILE__, __LINE__);
 #define $
 
@@ -125,7 +125,7 @@ node_t* get_t (const char* str, size_t *char_count, tree_t *tree)
         assert(str);
         assert(char_count);
 $
-        node_t *l_node = get_p(str, char_count, tree);
+        node_t *l_node = get_d(str, char_count, tree);
         node_t *node = nullptr;
 
         while(*(str + *char_count) == '*' || *(str + *char_count) == '/') {
@@ -142,6 +142,33 @@ $
                 printf("=-=-node data: %x %c %llg\n", node, node->left->data, node->left->data);
                 node->right = r_node;
                 printf("=-=-node data: %x %c %llg\n", node, node->right->data, node->right->data);
+        }
+
+        if (node)
+                return node;
+        return l_node;
+}
+
+node_t* get_d (const char* str, size_t *char_count, tree_t *tree)
+{
+        assert(str);
+        assert(char_count);
+$
+        node_t *l_node = get_p(str, char_count, tree);
+        node_t *node = nullptr;
+
+        while(*(str + *char_count) == '^') {
+                node_t temp_node = {};
+                char op = *(str + *char_count);
+                ++*char_count;
+                node_t *r_node = get_d(str, char_count, tree);
+
+                temp_node.type = OPERATOR;
+                temp_node.data.op = op;
+                node = tree_insert(&temp_node);
+                $
+                node->left  = l_node;
+                node->right = r_node;
         }
 
         if (node)

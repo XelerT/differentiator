@@ -58,3 +58,6 @@ clean_cmd:
 .PHONY: graphviz
 graphviz:
 	@ dot -T $(IMG_FORMAT) -o graph.$(IMG_FORMAT) $(DOT_FILE_NAME)
+.PHONY: original_graphviz
+original_graphviz:
+	@ dot -T $(IMG_FORMAT) -o tree_graph.$(IMG_FORMAT) tree_graph.dot
