@@ -32,7 +32,7 @@ int main ()
         diffed_tree.root = diff_tree((const node_t*) tree.root, &diffed_tree);
         diffed_tree.root = simplify_brunch(diffed_tree.root);
         collapse_consts(diffed_tree.root);
-        // diffed_tree.root = simplify_brunch(diffed_tree.root);
+        diffed_tree.root = simplify_brunch(diffed_tree.root);
 
         tree_graph(&diffed_tree, "diffed_graph.dot");
 $

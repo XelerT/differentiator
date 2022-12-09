@@ -120,6 +120,7 @@ node_t* diff_tree (const node_t *origin_node, tree_t *tree)
                         edit_temp(&temp_node, OPERATOR, MUL);
                         strcpy(temp_node2.func, "cos");
                         temp_node2.type = FUNC;
+                        temp_node2.data.dbl = -1;
 
                         new_node = create_brunch(ins_temp, tree_insert(&temp_node2), diff(right));
                         L->right = ins_origin(right);
@@ -129,6 +130,7 @@ node_t* diff_tree (const node_t *origin_node, tree_t *tree)
                         edit_temp(&temp_node, OPERATOR, MUL);
                         strcpy(temp_node2.func, "sin");
                         temp_node2.type = FUNC;
+                        temp_node2.data.dbl = -1;
 
                         new_node = create_brunch(ins_temp, ins_temp, diff(right));
 
@@ -272,18 +274,16 @@ node_t* simplify_brunch (node_t *node)
         node_t *temp_node = node;
 
         if (node->left)
-                node->left = simplify_brunch(node->left);
+                node->left  = simplify_brunch(node->left);
         if (node->right)
                 node->right = simplify_brunch(node->right);
         $
         if (node->type == OPERATOR) {
-        $
+        // printf("func %s\n", node->func);
                 switch (node->data.op) {
                 case ADD:
                         if (node->left->type == NUMBER) {
-                        $
                                 if (node->left->data.dbl == 0) {
-                        $
                                         temp_node = node->right;
                                         free(node->left);
                                         node->left = nullptr;
@@ -301,7 +301,10 @@ node_t* simplify_brunch (node_t *node)
                 case MUL:
                 $
                         if (node->left->type == NUMBER || node->right->type == NUMBER) {
-                                if (node->left->data.dbl == 0 || node->right->data.dbl == 0) {
+                                printf("data %d func %s\n", node->left->data.dbl, node->left->func);
+                                if ((node->left->data.dbl == 0 || node->right->data.dbl == 0)
+                                     && node->left->type != FUNC && node->right->type != FUNC) {
+                                $
                                         node->type = NUMBER;
                                         node->data.dbl = 0;
                                         temp_node = node;
@@ -309,8 +312,8 @@ node_t* simplify_brunch (node_t *node)
                                         node->right = nullptr;
                                         free(node->left);
                                         node->left = nullptr;
-                                }
                                 break;
+                                }
                         }
                         if (node->left->type == NUMBER) {
                                 if (node->left->data.dbl == 1) {
@@ -320,7 +323,9 @@ node_t* simplify_brunch (node_t *node)
                                         free(node);
                                 }
                         } else if (node->right->type == NUMBER) {
+                        $
                                 if (node->right->data.dbl == 1) {
+                                $
                                         temp_node = node->left;
                                         free(node->right);
                                         node->right = nullptr;
@@ -329,15 +334,8 @@ node_t* simplify_brunch (node_t *node)
                         }
                         break;
                 case DEG:
-                        if (node->left->type == NUMBER) {
-                                if (node->left->data.dbl == 1) {
-                                        temp_node = node->left;
-                                        free(node->right);
-                                        node->right = nullptr;
-                                        free(node);
-                                }
-                        } else if (node->right->type == NUMBER) {
-                                if (node->right->data.dbl == 1) {
+                        if (node->left->type == NUMBER || node->right->type == NUMBER) {
+                                if (node->left->data.dbl == 1 || node->right->data.dbl == 1) {
                                         temp_node = node->left;
                                         free(node->right);
                                         node->right = nullptr;
@@ -348,5 +346,6 @@ node_t* simplify_brunch (node_t *node)
                 }
         }
 
+        printf("--func %s %d\n", temp_node->func, temp_node->type);
         return temp_node;
 }
