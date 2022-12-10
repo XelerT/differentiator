@@ -1,0 +1,94 @@
+\documentclass[a4paper, 12pt]{article} % тип документа
+
+%%%Библиотеки
+    %\usepackage[warn]{mathtext}	
+    \usepackage[T2A]{fontenc}   %Кодировка
+    \usepackage[utf8]{inputenc} %Кодировка исходного текста
+    \usepackage[english, russian]{babel} %Локализация и переносы
+    \usepackage{caption}
+    \usepackage{gensymb}
+    %\usepackage{listings}
+    \usepackage{amsmath, amsfonts, amssymb, amsthm, mathtools}
+    %\usepackage[warn]{mathtext}
+    %\usepackage[mathscr]{eucal}
+    %\usepackage{wasysym}
+    %\usepackage{graphicx} %Вставка картинок правильная
+    %\usepackage{pgfplots}
+    \usepackage{indentfirst}
+    %\usepackage{float}    %Плавающие картинки
+    %\usepackage{wrapfig}  %Обтекание фигур (таблиц, картинок и прочего)
+    \usepackage{fancyhdr}  %Загрузим пакет
+    %\usepackage{lscape}
+    %\usepackage{xcolor}
+    %\usepackage[normalem]{ulem}
+    
+    \usepackage{titlesec}
+    \titlelabel{\thetitle.\quad}
+
+    \usepackage{hyperref}
+
+%%%Конец библиотек
+
+%%%Настройка ссылок
+    \hypersetup
+    {
+        colorlinks = true,
+        linkcolor  = blue,
+        filecolor  = magenta,
+        urlcolor   = blue
+    }
+%%%Конец настройки ссылок
+
+
+%%%Настройка колонтитулы
+    \pagestyle{fancy}
+    \fancyhead{}
+    \fancyhead[L]{1.2.3}
+    \fancyhead[R]{Таранов Александр, группа Б01-206}
+    \fancyfoot[C]{\thepage}
+%%%конец настройки колонтитулы
+
+
+\begin{document}
+
+%%%Начало титульника
+\begin{titlepage}
+
+    \newpage
+    \begin{center}
+        \normalsize Московский физико-технический институт \\(госудраственный университет)
+    \end{center}
+
+    \vspace{6em}
+
+    \begin{center}
+        \Large Лабораторная работа по общему курсу физики\\Механика
+    \end{center}
+
+    \vspace{1em}
+
+    \begin{center}
+        \Large \textbf{1.4.8. Измерение модуля Юнга методом акустического резонанса}
+    \end{center}
+
+    \vspace{2em}
+
+    \begin{center}
+        \large Таранов Александр \\
+        Группа Б01-206
+    \end{center}
+
+    \vspace{\fill}
+
+\end{titlepage}
+%%%Конец Титульника
+
+
+
+%%%Настройка оглавления и нумерации страниц
+    \thispagestyle{empty}
+    \newpage
+    \tableofcontents
+    \newpage
+    \setcounter{page}{1}
+%%%Настройка оглавления и нумерации страниц

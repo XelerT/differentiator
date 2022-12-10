@@ -1,4 +1,4 @@
-CFILES = main.cpp tree\tree.cpp tree\tree_dump.cpp tree\text_tree.cpp diff.cpp
+CFILES = main.cpp tree\tree.cpp tree\tree_dump.cpp tree\text_tree.cpp diff.cpp tree_tex.cpp
 OUTPUT = a.exe
 IMG_FORMAT = png
 DOT_FILE_NAME = diffed_graph.dot
@@ -45,6 +45,8 @@ CFLAGS= -Wshadow    			\
 
 all:
 	@ g++ -o $(OUTPUT) $(CFLAGS) $(CFILES)
+def:
+	@g++ -E $(OUTPUT) $(CFLAGS) $(CFILES) >> defines.txt
 run:
 	@ a.exe
 	@ echo Run

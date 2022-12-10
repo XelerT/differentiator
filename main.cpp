@@ -3,6 +3,7 @@
 #include "tree\tree_dump.h"
 #include "tree\text_tree.h"
 #include "diff.h"
+#include "tree_tex.h"
 
 #define $ fprintf(stderr, "I'm here. File %s Line %d\n", __FILE__, __LINE__);
 
@@ -27,15 +28,23 @@ int main ()
         $
         tree_graph(&tree, "tree_graph.dot");
 
+        FILE *output = fopen("tree.tex", "w");
+        if (!output) {
+                fprintf(stderr, "File %s pointer is null.\n", "tree.tex");
+                return NULL_FILE_PTR;
+        }
+
+        start_tex(&tree, "tree.tex", "intro.txt", output);
+
         tree_t diffed_tree = {};
         tree_ctor(&diffed_tree);
         diffed_tree.root = diff_tree((const node_t*) tree.root, &diffed_tree);
-        diffed_tree.root = simplify_brunch(diffed_tree.root);
-        collapse_consts(diffed_tree.root);
-        diffed_tree.root = simplify_brunch(diffed_tree.root);
+        convert_tree(&diffed_tree, output);
+        simplify_tree(&diffed_tree, output);
 
         tree_graph(&diffed_tree, "diffed_graph.dot");
 $
+        end_tex(output);
         fclose(diff);
         tree_dtor(&diffed_tree);
         tree_dtor(&tree);
