@@ -47,6 +47,7 @@ all:
 	@ g++ -o $(OUTPUT) $(CFLAGS) $(CFILES)
 def:
 	@g++ -E $(OUTPUT) $(CFLAGS) $(CFILES) >> defines.txt
+
 run:
 	@ a.exe
 	@ echo Run
@@ -54,12 +55,15 @@ run:
 .PHONY: clean
 clean:
 	@ rm -f $(OUTPUT)
+
 .PHONY: clean_cmd
 clean_cmd:
 	@ cls
+
 .PHONY: graphviz
 graphviz:
 	@ dot -T $(IMG_FORMAT) -o graph.$(IMG_FORMAT) $(DOT_FILE_NAME)
+
 .PHONY: original_graphviz
 original_graphviz:
 	@ dot -T $(IMG_FORMAT) -o tree_graph.$(IMG_FORMAT) tree_graph.dot

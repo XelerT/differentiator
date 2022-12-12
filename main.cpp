@@ -39,12 +39,19 @@ int main ()
         tree_t diffed_tree = {};
         tree_ctor(&diffed_tree);
         diffed_tree.root = diff_tree((const node_t*) tree.root, &diffed_tree);
-        convert_tree(&diffed_tree, output);
+        $
+        tex_tree(&diffed_tree, output);
         simplify_tree(&diffed_tree, output);
 
+        diffed_tree.root = diff_tree((const node_t*) diffed_tree.root, &diffed_tree);
+        tex_tree(&diffed_tree, output);
+        simplify_tree(&diffed_tree, output);
+
+$
         tree_graph(&diffed_tree, "diffed_graph.dot");
 $
         end_tex(output);
+        tex_pdf("tree.tex");
         fclose(diff);
         tree_dtor(&diffed_tree);
         tree_dtor(&tree);

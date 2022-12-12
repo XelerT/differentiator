@@ -91,11 +91,11 @@ void tree_graph (tree_t *tree, const char *dot_file_name)
         tie_gv_nodes(tree->root);
 
         fprintf(dot_file, "\n}");
+        fclose(dot_file);
 }
 
 void print_gv_nodes (node_t *node)
 {
-
         if (node->left)
                 print_gv_nodes(node->left);
         if (node->right)

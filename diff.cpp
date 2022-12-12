@@ -6,6 +6,9 @@
 #include "diff.h"
 #include "tree_tex.h"
 
+#include "tree\tree_dump.h"
+#include "tree\text_tree.h"
+
 #define diff(side) diff_tree(origin_node->side, tree)
 #define ins_temp tree_insert(&temp_node)
 #define ins_origin(side) copy_brunch(origin_node->side)
@@ -229,14 +232,24 @@ node_t* collapse_consts (node_t *node, int *changed)
 {
         assert(node);
 
-        if (node->left)
+        if (node->left) {
+        $
+                // getchar();
+                // printf("%x-------------------type %d-----------------------%llg\n", node->left, node->type, node->data.dbl);
                 node->left  = collapse_consts(node->left, changed);
-        if (node->right)
+        $
+        }
+        $
+        if (node->right) {
+        $
                 node->right = collapse_consts(node->right, changed);
-
+        $
+        }
+$
         if (node->left && node->right)
                 if (node->left->type == NUMBER && node->right->type == NUMBER) {
                         if (node->type == OPERATOR) {
+                        $
                                 elem_t data;
                                 switch (node->data.op) {
                                 case ADD:
@@ -258,14 +271,14 @@ node_t* collapse_consts (node_t *node, int *changed)
                                 node->type = NUMBER;
                                 node->data.dbl = data.dbl;
                                 *changed = 1;
-
+$
                                 free(node->left);
                                 free(node->right);
                                 node->left  = nullptr;
                                 node->right = nullptr;
                         }
                 }
-
+$
         return node;
 }
 
@@ -275,10 +288,14 @@ node_t* simplify_brunch (node_t *node, int *changed)
         $
         node_t *temp_node = node;
 
-        if (node->left)
+        if (node->left) {
+        $
                 node->left  = simplify_brunch(node->left, changed);
-        if (node->right)
+        }
+        if (node->right) {
+        $
                 node->right = simplify_brunch(node->right, changed);
+        }
         $
         if (node->type == OPERATOR) {
         // printf("func %s\n", node->func);
@@ -306,6 +323,7 @@ node_t* simplify_brunch (node_t *node, int *changed)
                         if (node->left->type == NUMBER || node->right->type == NUMBER) {
                                 if ((node->left->data.dbl == 0 || node->right->data.dbl == 0)
                                      && node->left->type != FUNC && node->right->type != FUNC) {
+                                        $
                                         node->type = NUMBER;
                                         node->data.dbl = 0;
                                         temp_node = node;
@@ -313,9 +331,8 @@ node_t* simplify_brunch (node_t *node, int *changed)
                                         node->right = nullptr;
                                         free(node->left);
                                         node->left = nullptr;
-                                        free(node);
-                                        node = nullptr;
-                                break;
+
+                                        return temp_node;
                                 }
                         }
                         if (node->left->type == NUMBER) {
@@ -349,7 +366,7 @@ node_t* simplify_brunch (node_t *node, int *changed)
                         break;
                 }
         }
-
+        $
         if (!node)
                 *changed = 1;
 
@@ -364,8 +381,11 @@ void simplify_tree (tree_t *tree, FILE *output)
 
         do {
                 changed = 0;
+
                 tree->root = simplify_brunch(tree->root, &changed);
+                $
                 collapse_consts(tree->root, &changed);
-                convert_tree (tree, output);
+                $
+                tex_tree(tree, output);
         } while (changed);
 }
