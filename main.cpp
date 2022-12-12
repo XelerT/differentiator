@@ -23,9 +23,7 @@ int main ()
         replace_n (&text);
         divide_text (&text);
         size_t char_count = 0;
-        $
         tree.root = get_g(text.buf, &char_count, &tree);
-        $
         tree_graph(&tree, "tree_graph.dot");
 
         FILE *output = fopen("tree.tex", "w");
@@ -38,18 +36,16 @@ int main ()
 
         tree_t diffed_tree = {};
         tree_ctor(&diffed_tree);
+        const_t const_nodes[MAX_N_CONSTS] = {};
+
         diffed_tree.root = diff_tree((const node_t*) tree.root, &diffed_tree);
-        $
+        add_consts(&diffed_tree, const_nodes);
+
         tex_tree(&diffed_tree, output);
         simplify_tree(&diffed_tree, output);
-
-        diffed_tree.root = diff_tree((const node_t*) diffed_tree.root, &diffed_tree);
-        tex_tree(&diffed_tree, output);
-        simplify_tree(&diffed_tree, output);
-
 $
         tree_graph(&diffed_tree, "diffed_graph.dot");
-$
+        show_consts(output, const_nodes);
         end_tex(output);
         tex_pdf("tree.tex");
         fclose(diff);

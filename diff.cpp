@@ -16,6 +16,8 @@
 #define L new_node->left
 #define R new_node->right
 
+#define $
+
 node_t* diff_tree (const node_t *origin_node, tree_t *tree)
 {
         assert(origin_node);
@@ -80,7 +82,8 @@ node_t* diff_tree (const node_t *origin_node, tree_t *tree)
                                                 L->left->right->right = ins_origin(right);
 
                                                 edit_temp(&temp_node2, OPERATOR, DIV);
-                                                L->right->left = create_brunch(ins_temp, ins_origin(left), tree_insert(&temp_node2));
+                                                L->right->left = create_brunch(ins_temp, ins_origin(left),
+                                                                               tree_insert(&temp_node2));
                                                 L->right->right = diff(right);
 
                                                 edit_temp(&temp_node, NUMBER, 1);
@@ -94,7 +97,8 @@ node_t* diff_tree (const node_t *origin_node, tree_t *tree)
                                         // edit_temp(&temp_node2, FUNC, "ln");
                                         temp_node2.type = FUNC;
                                         strcpy(temp_node2.func, "ln");
-                                        L = create_brunch(ins_temp, copy_brunch((node_t*) origin_node), tree_insert(&temp_node2));
+                                        L = create_brunch(ins_temp, copy_brunch((node_t*) origin_node),
+                                                          tree_insert(&temp_node2));
                                         L->right->right = ins_origin(left);
                                         R = diff(right);
                                 } else if (contain_var(origin_node->left)) {
@@ -170,6 +174,7 @@ int edit_temp (node_t *temp_node, int node_type, int node_data)          //retur
                 temp_node->data.op = node_data;
                 return OPERATOR;
         case VARIABLE:
+        case CONST:
                 temp_node->data.var = node_data;
                 return VARIABLE;
         // case FUNC:

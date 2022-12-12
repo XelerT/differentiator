@@ -43,7 +43,8 @@ enum types_t {
         VARIABLE = 1,
         OPERATOR = 2,
         NUMBER   = 3,
-        FUNC     = 4
+        FUNC     = 4,
+        CONST    = 5
 };
 
 const int MAX_NAME_LENGTH = 50;
